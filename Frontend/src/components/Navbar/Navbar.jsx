@@ -1,18 +1,12 @@
-import { useState } from "react";
-import "../theme/theme.css";
+import React from "react";
+import { Link, NavLink } from "react-router-dom";
+import logo from "../Assets/shop-name1.png";
 import "./Navbar.css";
-import logo from "../Assets/shop-name1.png"; // change to logo2.png / logo3.png if you prefer
 
-const NAV_LINKS = [
-  { label: "Explore shops", href: "/shops" },
-  { label: "How it works", href: "/how-it-works" },
-  { label: "For sellers", href: "/sellers" },
-];
-
-const UserIcon = ({ size = 20 }) => (
+const UserIcon = () => (
   <svg
-    width={size}
-    height={size}
+    width="20"
+    height="20"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
@@ -21,50 +15,38 @@ const UserIcon = ({ size = 20 }) => (
     strokeLinejoin="round"
     aria-hidden="true"
   >
-    <circle cx="12" cy="8" r="3.8" />
-    <path d="M4.5 20c.8-4 4-6 7.5-6s6.7 2 7.5 6" />
+    <circle cx="12" cy="8" r="4" />
+    <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8" />
   </svg>
 );
 
-export default function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false);
-
+const Navbar = () => {
   return (
-    <header className="header">
-      <div className="container header__inner">
-        <a href="/" className="header__logo" aria-label="NearShop home">
-          <img src={logo} alt="NearShop" />
-        </a>
+    <header className="navbar">
+      <div className="navbar__inner">
+        <Link to="/" className="navbar__brand" aria-label="Near Shop home">
+          <img src={logo} alt="Near Shop" className="navbar__logo" />
+        </Link>
 
-        <nav
-          className={`header__nav ${menuOpen ? "is-open" : ""}`}
-          aria-label="Main navigation"
-        >
-          {NAV_LINKS.map((l) => (
-            <a key={l.label} href={l.href} onClick={() => setMenuOpen(false)}>
-              {l.label}
-            </a>
-          ))}
-          <a href="/login" className="btn btn-outline header__signin header__signin--mobile">
-            <UserIcon /> Sign in 
-          </a>
+        <nav className="navbar__links" aria-label="Main navigation">
+          <NavLink to="/shops" className="navbar__link">
+            Explore shops
+          </NavLink>
+          <NavLink to="/how-it-works" className="navbar__link">
+            How it works
+          </NavLink>
+          <NavLink to="/sellers" className="navbar__link">
+            For sellers
+          </NavLink>
         </nav>
 
-        <a href="/login" className="btn btn-outline header__signin header__signin--desktop">
-          <UserIcon /> Sign in
-        </a>
-
-        <button
-          className="header__toggle"
-          aria-label="Toggle menu"
-          aria-expanded={menuOpen}
-          onClick={() => setMenuOpen((o) => !o)}
-        >
-          <span />
-          <span />
-          <span />
-        </button>
+        <Link to="/signin" className="navbar__signin">
+          <UserIcon />
+          <span>Sign in</span>
+        </Link>
       </div>
     </header>
   );
-}
+};
+
+export default Navbar;
