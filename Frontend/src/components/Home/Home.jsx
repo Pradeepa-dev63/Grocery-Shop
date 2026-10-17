@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
-import logo from "../Assets/shop-name1.png"; 
+import logo from "../../Assets/shop-name1.png"; 
 import "./Home.css";
 
 
 /* ---------- small inline icons ---------- */
+
 const Icon = ({ children }) => (
   <svg
     width="30"
@@ -199,67 +200,49 @@ const Home = () => {
 
       {/* ---------------- ROLE CARDS ---------------- */}
     
-      <section className="roles">
+       <section className="roles">
         <h2>How would you like to use Near Shop?</h2>
         <p className="roles__sub">
           Choose the option that best describes you. Get started in just a few
           clicks.
         </p>
 
+        <div className="roles__grid">
+          <article
+            className={`role-card ${activeRole === "customer" ? "role-card--active" : ""}`}
+            onClick={() => setActiveRole("customer")}
+            onMouseEnter={() => setActiveRole("customer")}
+          >
+            <div className="role-card__top">
+              <BasketArt />
+              <div>
+                <h3>I’m shopping</h3>
+                <p>Find groceries and order from nearby shops.</p>
+              </div>
+            </div>
+            <Link to="/customer" className="role-btn">
+              Browse as customer <ArrowIcon />
+            </Link>
+          </article>
 
-<div className="roles__grid">
-  <article
-    className={`role-card ${activeRole === "customer" ? "role-card--active" : ""}`}
-    onClick={() => setActiveRole("customer")}
-    onMouseEnter={() => setActiveRole("customer")}
-  >
-    <div className="role-card__top">
-      <BasketArt />
-      <div>
-        <h3>I’m shopping</h3>
-        <p>Find groceries and order from nearby shops.</p>
-      </div>
-    </div>
-    <Link to="/customer" className="role-btn">
-      Browse as customer <ArrowIcon />
-    </Link>
-  </article>
-
-  <article
-    className={`role-card ${activeRole === "seller" ? "role-card--active" : ""}`}
-    onClick={() => setActiveRole("seller")}
-    onMouseEnter={() => setActiveRole("seller")}
-  >
-    <div className="role-card__top">
-      <StoreArt />
-      <div>
-        <h3>I run a shop</h3>
-        <p>List products and manage local orders.</p>
-      </div>
-    </div>
-    <Link to="/seller" className="role-btn">
-      Start selling <ArrowIcon />
-    </Link>
-  </article>
-
-  <article
-    className={`role-card ${activeRole === "admin" ? "role-card--active" : ""}`}
-    onClick={() => setActiveRole("admin")}
-    onMouseEnter={() => setActiveRole("admin")}
-  >
-    <div className="role-card__top">
-      <ShieldArt />
-      <div>
-        <h3>Admin access</h3>
-        <p>For authorized Near Shop staff.</p>
-      </div>
-    </div>
-    <Link to="/admin" className="role-btn">
-      Admin sign in <ArrowIcon />
-    </Link>
-  </article>
-</div>
-
+          <article
+            className={`role-card ${activeRole === "seller" ? "role-card--active" : ""}`}
+            onClick={() => setActiveRole("seller")}
+            onMouseEnter={() => setActiveRole("seller")}
+          >
+            <div className="role-card__top">
+              <StoreArt />
+              <div>
+                <h3>I run a shop</h3>
+                <p>List products and manage local orders.</p>
+              </div>
+            </div>
+            <Link to="/seller" className="role-btn">
+              Start selling <ArrowIcon />
+            </Link>
+          </article>
+          
+        </div>
       </section>
 
       {/* ---------------- FOOTER ---------------- */}
@@ -269,7 +252,7 @@ const Home = () => {
           <span className="footer__divider" />
 
           <nav className="footer__links" aria-label="Footer">
-            <Link to="/about">About us</Link>
+            <Link to="/about">About us </Link>
             <Link to="/blog">Blog</Link>
             <Link to="/help">Help &amp; Support</Link>
             <Link to="/terms">Terms of service</Link>
