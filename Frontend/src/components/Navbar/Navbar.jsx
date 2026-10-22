@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
-import logo from "../../Assets/logo1.png";
+import logo from "../../Assets/logo.png";
 import "./Navbar.css";
 
 const UserIcon = () => (

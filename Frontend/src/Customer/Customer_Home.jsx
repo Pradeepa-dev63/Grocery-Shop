@@ -1,206 +1,304 @@
-import React, { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import "./Customer_Home.css";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
-import "./Customer_Home.css";
-import vegImg from "../Assets/vegetables.png";
-import fruitImg from "../Assets/fruits.png";
-import drinks from "../Assets/drinks.png";
-import snacks from "../Assets/snacks.png";
-import nuts from "../Assets/nuts.png";
+import { customer_carosal, customer_categories, customer_card_product } from "../components/All_Images/Images";
+import Common_Footer from "../components/Footer/Common_Footer";
+import { useNavigate } from "react-router-dom";
 
-/* ---------- banner slides (replace text / images later) ---------- */
-const slides = [
-  {
-    title: "Fresh vegetables, delivered fast",
-    text: "Order from shops near you and get it at your door.",
-    bg: "linear-gradient(120deg, #1f6f35 0%, #7cb518 100%)",
-  },
-  {
-    title: "Daily dairy & bakery",
-    text: "Milk, bread and more from your neighbourhood stores.",
-    bg: "linear-gradient(120deg, #0b4a2a 0%, #2e7d32 100%)",
-  },
-  {
-    title: "Support local shops",
-    text: "Every order helps a small business in your area.",
-    bg: "linear-gradient(120deg, #e8a317 0%, #7cb518 100%)",
-  },
-];
 
-/* ---------- categories (5 circles) ---------- */
+export default function Customer_Home() {
+  const [cartCount, setCartCount] = useState(0);
+  const [favorites, setFavorites] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [toast, setToast] = useState("");
+  const [email, setEmail] = useState("");
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const heroSlides = Array.isArray(customer_carosal) ? customer_carosal : [];
+  const navigate = useNavigate();
 
-const categories = [
-  { name: "Vegetables", image: vegImg },
-  { name: "Fruits", image: fruitImg },
-  { name: "Dairy", image: drinks },
-  { name: "Snacks", image: snacks },
-  { name: "Nuts", image: nuts },
-];
 
-/* ---------- products (8 cards = 2 rows of 4) ---------- */
-const products = [
-  { id: 1, name: "Fresh Tomato", shop: "Green Mart", price: 40, unit: "1 kg", icon: "🍅" },
-  { id: 2, name: "Carrot", shop: "Fresh Basket", price: 55, unit: "1 kg", icon: "🥕" },
-  { id: 3, name: "Farm Milk", shop: "Daily Dairy", price: 32, unit: "500 ml", icon: "🥛" },
-  { id: 4, name: "Whole Bread", shop: "Baker's Hub", price: 45, unit: "1 pack", icon: "🍞" },
-  { id: 5, name: "Banana", shop: "Green Mart", price: 60, unit: "1 dozen", icon: "🍌" },
-  { id: 6, name: "Broccoli", shop: "Fresh Basket", price: 70, unit: "500 g", icon: "🥦" },
-  { id: 7, name: "Red Apple", shop: "Fruit Corner", price: 180, unit: "1 kg", icon: "🍎" },
-  { id: 8, name: "Eggs", shop: "Daily Dairy", price: 84, unit: "12 pcs", icon: "🥚" },
-];
-
-const Customer = () => {
-  const [current, setCurrent] = useState(0);
-  const [activeCategory, setActiveCategory] = useState(null);
-  const [cart, setCart] = useState({});
-
-  const next = () => setCurrent((c) => (c + 1) % slides.length);
-  const prev = () => setCurrent((c) => (c - 1 + slides.length) % slides.length);
-
-  /* auto slide every 4 seconds */
   useEffect(() => {
-    const timer = setInterval(next, 4000);
+    if (heroSlides.length === 0) return;
+    const timer = setInterval(() => {
+      setCurrentSlide((current) => (current + 1) % heroSlides.length);
+    }, 4000);
     return () => clearInterval(timer);
-  }, []);
+  }, [heroSlides.length]);
 
-  const addToCart = (id) =>
-    setCart((c) => ({ ...c, [id]: (c[id] || 0) + 1 }));
 
-  const removeFromCart = (id) =>
-    setCart((c) => {
-      const qty = (c[id] || 0) - 1;
-      const copy = { ...c };
-      if (qty <= 0) delete copy[id];
-      else copy[id] = qty;
-      return copy;
-    });
+  const previousSlide = () => {
+    setCurrentSlide((current) =>
+      (current - 1 + heroSlides.length) % heroSlides.length
+    );
+  };
 
+  const nextSlide = () => {
+    setCurrentSlide((current) =>
+      (current + 1) % heroSlides.length
+    );
+  };
+
+
+  function notify(message) {
+    setToast(message);
+    window.clearTimeout(notify.timeout);
+    notify.timeout = window.setTimeout(() => setToast(""), 2300);
+  }
+
+  function chooseCategory(name) {
+    setSelectedCategory(name);
+    notify(name === "All" ? "Showing all products" : `Showing ${name}`);
+  }
+
+  function toggleFavorite(id) {
+    const isFavorite = favorites.includes(id);
+
+    setFavorites((current) =>
+      isFavorite
+        ? current.filter((item) => item !== id)
+        : [...current, id]
+    );
+
+    notify(isFavorite ? "Removed from favorites" : "Added to favorites");
+  }
+
+  const visibleProducts =
+    selectedCategory === "All"
+      ? customer_card_product
+      : customer_card_product.filter(
+        (product) => product.category === selectedCategory
+      );
+
+
+  function addToCart(productName) {
+    setCartCount((count) => count + 1);
+    notify(`${productName} added to your basket`);
+  }
+
+  
   return (
-    <div className="customer">
+    <div className="customer-home">
       <Navbar />
 
-      <main className="customer__main">
+      <main id="top">
 
-        {/* ---------------- BANNER SLIDER ---------------- */}
+        {/* ======== CAROSAL BAR  ============ */}
 
-        <section className="banner" aria-label="Offers">
+        <section className="customer-hero" aria-label="Featured offers">
           <div
-            className="banner__track"
-            style={{ transform: `translateX(-${current * 100}%)` }}
+            className="customer-hero-track"
+            style={{ transform: `translateX(-${currentSlide * 100}%)` }}
           >
-            {slides.map((s) => (
-              <div className="banner__slide" key={s.title} style={{ background: s.bg }}>
-                <div className="banner__text">
-                  <h2>{s.title}</h2>
-                  <p>{s.text}</p>
-                </div>
+            {heroSlides.map((image, index) => (
+              <div className="customer-hero-slide" key={image}>
+                <img
+                  className="customer-hero-image"
+                  style={{ objectFit: "cover", width: "100%", height: "100%" }}
+                  src={image}
+                  alt={`Grocery offer ${index + 1}`}
+                />
               </div>
             ))}
           </div>
 
-          <button className="banner__arrow banner__arrow--left" onClick={prev} aria-label="Previous">
+          <button
+            className="customer-hero-arrow customer-hero-arrow--left"
+            onClick={() =>
+              setCurrentSlide((current) =>
+                (current - 1 + heroSlides.length) % heroSlides.length
+              )
+            }
+            aria-label="Previous slide"
+          >
             ‹
           </button>
-          <button className="banner__arrow banner__arrow--right" onClick={next} aria-label="Next">
+
+          <button
+            className="customer-hero-arrow customer-hero-arrow--right"
+            onClick={() =>
+              setCurrentSlide((current) => (current + 1) % heroSlides.length)
+            }
+            aria-label="Next slide"
+          >
             ›
           </button>
 
-          <div className="banner__dots">
-            {slides.map((s, i) => (
+          <div className="customer-hero-dots">
+            {heroSlides.map((_, index) => (
               <button
-                key={s.title}
-                className={`banner__dot ${i === current ? "is-active" : ""}`}
-                onClick={() => setCurrent(i)}
-                aria-label={`Go to slide ${i + 1}`}
+                key={index}
+                className={`customer-hero-dot ${currentSlide === index ? "is-active" : ""
+                  }`}
+                onClick={() => setCurrentSlide(index)}
+                aria-label={`Go to slide ${index + 1}`}
+                aria-current={currentSlide === index ? "true" : undefined}
               />
             ))}
           </div>
         </section>
 
-        {/* ---------------- CATEGORY HEXAGONS  ---------------- */}
+        {/* ======== ALL CATEGORY TAB ============ */}
 
-        <section className="categories" aria-label="Categories">
-          {categories.map((c) => (
+        <section className="customer-section" id="categories">
+          <div className="customer-section-heading">
+            <h2>Shop by Category</h2>
+
             <button
-              key={c.name}
-              className={`category ${activeCategory === c.name ? "is-active" : ""}`}
-              onClick={() =>
-                setActiveCategory(activeCategory === c.name ? null : c.name)
-              }
+              className="customer-text-button"
+              onClick={() => {
+                chooseCategory("All");
+                navigate("/Category_product");
+              }}
             >
-             
-             <span className="hex">
-  <span className="hex__content">
-    <img src={c.image} alt={c.name} className="category__img" />
-  </span>
-
-  <svg
-    className="hex__svg"
-    viewBox="0 0 200 110"
-    preserveAspectRatio="none"
-    aria-hidden="true"
-  >
-    <polygon className="hex__outer" points="50,2 150,2 198,55 150,108 50,108 2,55" />
-    <polygon className="hex__inner" points="54,12 146,12 186,55 146,98 54,98 14,55" />
-  </svg>
-</span>
-
-
-
-              <span className="category__name">{c.name}</span>
+              View all →
             </button>
-          ))}
-        </section>
 
-
-        {/* ---------------- EXPLORE ---------------- */}
-
-        <section className="explore">
-          <h2 className="explore__title">Explore!</h2>
-
-          <div className="explore__grid">
-            {products.map((p) => (
-              <article className="product" key={p.id}>
-                <div className="product__image">
-                  <span>{p.icon}</span>
-                </div>
-
-                <div className="product__info">
-                  <div className="product__details">
-                    <h3>{p.name}</h3>
-                    <p className="product__shop">{p.shop}</p>
-                    <p className="product__price">
-                      ₹{p.price} <small>/ {p.unit}</small>
-                    </p>
-                  </div>
-
-                  {cart[p.id] ? (
-                    <div className="qty">
-                      <button onClick={() => removeFromCart(p.id)} aria-label="Remove one">
-                        −
-                      </button>
-                      <span>{cart[p.id]}</span>
-                      <button onClick={() => addToCart(p.id)} aria-label="Add one">
-                        +
-                      </button>
-                    </div>
-                  ) : (
-                    <button className="product__add" onClick={() => addToCart(p.id)}>
-                      Add
-                    </button>
-                  )}
-                </div>
-              </article>
-            ))}
           </div>
 
-          <div className="explore__back">
-            <Link to="/">← Back to home</Link>
+          <div className="customer-categories">
+            {customer_categories.map((category) => (
+              <button
+                type="button"
+                className={`customer-category ${selectedCategory === category.name ? "is-selected" : ""
+                  }`}
+                key={category.name}
+                onClick={() => chooseCategory(category.name)}
+                aria-pressed={selectedCategory === category.name}
+              >
+                <img
+                  className="customer-category-image"
+                  src={category.image}
+                  alt=""
+                />
+                <span className="customer-category-name">{category.name}</span>
+              </button>
+            ))}
+          </div>
+        </section>
+
+        {/*----------- VIWE ALL --------------*/}
+
+        <section className="customer-section" id="products">
+          <div className="customer-section-heading">
+            <div>
+              <h2>Popular Products</h2>
+              {selectedCategory !== "All" && (
+                <p className="customer-filter-note">
+                  Showing {selectedCategory}
+                </p>
+              )}
+            </div>
+
+            {/* <button
+              className="customer-text-button"
+              onClick={() => chooseCategory("All")}
+            >
+              View all →
+            </button> */}
+
+          </div>
+
+          {/*----------- ALL CARD --------------*/}
+
+          <div className="customer-products">
+            {visibleProducts.length ? (
+              visibleProducts.map((product) => {
+                const isFavorite = favorites.includes(product.id);
+
+                return (
+                  <article className="customer-product" key={product.id}>
+                    <div className="customer-product-visual">
+                      <span className="customer-discount">
+                        {product.discount}
+                      </span>
+
+                      <button
+                        className={`customer-heart ${isFavorite ? "is-favorite" : ""
+                          }`}
+                        aria-label={`Toggle ${product.name} favorite`}
+                        aria-pressed={isFavorite}
+                        onClick={() => toggleFavorite(product.id)}
+                      >
+                        {isFavorite ? "♥" : "♡"}
+                      </button>
+
+                      <img
+                        className="customer-product-image"
+                        src={product.image}
+                        alt={product.name}
+                      />
+
+                    </div>
+
+                    <div className="customer-product-info">
+
+                      <h3>{product.name}</h3>
+                      <div className="customer-rating">
+                        <b>★</b> {product.rating}
+                      </div>
+
+                      <div className="customer-price-row">
+                        <strong>₹{product.price}</strong>
+                        <del>₹{product.oldPrice}</del>
+                        <span>{product.weight}</span>
+                      </div>
+
+                      <button
+                        className="customer-add-button"
+                        onClick={() => addToCart(product.name)}
+                      >
+                        🛒 &nbsp; Add to Cart
+                      </button>
+                    </div>
+                  </article>
+                );
+              })
+            ) : (
+              <p className="customer-empty">
+                No products in this category yet.
+              </p>
+            )}
+          </div>
+
+        </section>
+
+        {/*----------- CUSTOMER PROMISE TAG  --------------*/}
+
+        <section className="customer-promises" id="offers">
+          <div>
+            <span>✿</span>
+            <p>
+              <b>Freshness Guaranteed</b>
+              <small>Farm to your doorstep</small>
+            </p>
+          </div>
+          <div>
+            <span>🚚</span>
+            <p>
+              <b>Fast, Reliable Delivery</b>
+              <small>On time, every time</small>
+            </p>
+          </div>
+          <div>
+            <span>✓</span>
+            <p>
+              <b>Safe &amp; Secure Payments</b>
+              <small>Checkout with confidence</small>
+            </p>
+          </div>
+          <div>
+            <span>♡</span>
+            <p>
+              <b>Support Local Farmers</b>
+              <small>A healthier community</small>
+            </p>
           </div>
         </section>
       </main>
+
+      <Common_Footer />
+
     </div>
   );
-};
-
-export default Customer;
+}

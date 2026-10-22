@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
-import logo from "../../Assets/shop-name1.png"; 
 import "./Home.css";
-
+import Footer_Home from "../Footer/Footer_home";
 
 /* ---------- small inline icons ---------- */
 
@@ -161,7 +160,7 @@ const Home = () => {
             <br />
             from shops <em>near you.</em>
           </h1>
-         
+
           <p className="hero__subtitle">
             Shop local, support neighbourhood stores and get fresh groceries
             delivered quickly to your home.
@@ -199,8 +198,8 @@ const Home = () => {
       </section>
 
       {/* ---------------- ROLE CARDS ---------------- */}
-    
-       <section className="roles">
+
+      <section className="roles">
         <h2>How would you like to use Near Shop?</h2>
         <p className="roles__sub">
           Choose the option that best describes you. Get started in just a few
@@ -241,47 +240,13 @@ const Home = () => {
               Start selling <ArrowIcon />
             </Link>
           </article>
-          
+
         </div>
       </section>
 
       {/* ---------------- FOOTER ---------------- */}
       <footer className="footer">
-        <div className="footer__inner">
-          <img src={logo} alt="Near Shop" className="footer__logo" />
-          <span className="footer__divider" />
-
-          <nav className="footer__links" aria-label="Footer">
-            <Link to="/about">About us </Link>
-            <Link to="/blog">Blog</Link>
-            <Link to="/help">Help &amp; Support</Link>
-            <Link to="/terms">Terms of service</Link>
-            <Link to="/privacy">Privacy policy</Link>
-            <Link to="/contact">Contact</Link>
-          </nav>
-
-          <div className="footer__social" aria-label="Social media">
-            <a href="#facebook" aria-label="Facebook">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.3v7A10 10 0 0 0 22 12z" /></svg>
-            </a>
-            <a href="#instagram" aria-label="Instagram">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r="1" fill="currentColor" /></svg>
-            </a>
-            <a href="#youtube" aria-label="YouTube">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2C2 8.8 2 12 2 12s0 3.2.4 4.8a2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8c.4-1.6.4-4.8.4-4.8s0-3.2-.4-4.8zM10 15V9l5.2 3z" /></svg>
-            </a>
-            <a href="#linkedin" aria-label="LinkedIn">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M4 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM2.5 9h3v12h-3zM9 9h2.9v1.7h.1c.4-.8 1.4-1.9 3.2-1.9 3.4 0 4 2.2 4 5.2V21h-3v-6.1c0-1.5 0-3.3-2-3.3s-2.3 1.600-2.300 3.200V21H9z" /></svg>
-            </a>
-          </div>
-
-          <span className="footer__divider" />
-          <p className="footer__tagline">
-            Stronger neighbourhoods
-            <br />
-            through better food
-          </p>
-        </div>
+        <Footer_Home />
       </footer>
     </div>
   );

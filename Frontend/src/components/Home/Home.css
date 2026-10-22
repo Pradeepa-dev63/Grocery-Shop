@@ -9,12 +9,6 @@
   --cream: #f6f7f1;
 }
 
-.home {
-  font-family: "Poppins", "Segoe UI", system-ui, -apple-system, sans-serif;
-  color: var(--ink);
-  background: #ffffff;
-}
-
 /* =============== HERO =============== */
 
 .hero {
@@ -32,7 +26,7 @@
       rgba(246, 247, 241, 0.85) 50%,
       rgba(246, 247, 241, 0) 72%
     ),
-    url("../../Assets/hero-background.png");
+    url("../../Assets/hero-background1.png");
   background-repeat: no-repeat;
   background-size: auto, cover;
   background-position: left center, right center;
@@ -346,76 +340,9 @@
   }
 }
 
-/* =============== FOOTER =============== */
-.footer {
-  border-top: 1px solid var(--line);
-  background: #ffffff;
-}
-
-.footer__inner {
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 18px 40px;
-  display: flex;
-  align-items: center;
-  gap: 28px;
-}
-
-.footer__logo {
-  height: 38px;
-  width: auto;
-}
-
-.footer__divider {
-  width: 1px;
-  height: 38px;
-  background: #d5dad1;
-  flex-shrink: 0;
-}
-
-.footer__links {
-  display: flex;
-  align-items: center;
-  gap: 36px;
-  flex: 1;
-  flex-wrap: wrap;
-}
-
-.footer__links a {
-  font-size: 14px;
-  color: #55605a;
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.footer__links a:hover {
-  color: var(--green-600);
-}
-
-.footer__social {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-}
-
-.footer__social a {
-  display: flex;
-  color: #111;
-  transition: color 0.2s ease;
-}
-
-.footer__social a:hover {
-  color: var(--green-600);
-}
-
-.footer__tagline {
-  margin: 0;
-  font-size: 13px;
-  line-height: 1.4;
-  color: #6b746e;
-}
 
 /* =============== RESPONSIVE =============== */
+
 @media (max-width: 1100px) {
   .roles__grid {
     grid-template-columns: 1fr;
