@@ -1,29 +1,3 @@
-// import { Routes, Route } from 'react-router-dom'
-// import Home from './components/Home/Home'
-// import Customer_Home from './Customer/Customer_Home'
-// import Seller_Home from './Seller/Seller_Home'
-// import Category_product from './Customer/Category_product'
-// import Product_types from './Customer/Product_types'
-// import Product_card_detail from './Customer/Product_card_detail'
-
-// function App() {
-//   return (
-//     <Routes>
-//       <Route path="/" element={<Home />} />
-//       <Route path="/customer" element={<Customer_Home />} />
-//       <Route path="/seller" element={<Seller_Home />} />
-//       <Route path="/Category_product" element={<Category_product/>} />
-//       <Route path="/category/:slug" element={<Product_types />} />
-//       <Route path="/category/:slug/product/:id" element={<Product_card_detail/>} />
-//     </Routes>
-//   )
-// }
-
-// export default App
-
-
-
-
 import { Routes, Route, Navigate } from 'react-router-dom'
 import Home from './components/Home/Home'
 import Seller_Login from "./Seller/Seller_Login";

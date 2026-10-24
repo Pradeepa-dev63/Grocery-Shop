@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
@@ -8,12 +7,12 @@ import "./Product_card_detail.css";
 export default function Product_detail() {
   const { slug, id } = useParams();
   const navigate = useNavigate();
-
   const category = categoryData[slug];
-  const product = category?.products.find((p) => String(p.id) === id);
-
-  const [quantity, setQuantity] = useState(1);
+  const product = category?.products?.find(
+    (item) => String(item.id) === String(id)
+  ); const [quantity, setQuantity] = useState(1);
   const [activeImage, setActiveImage] = useState(0);
+  const [zoomOpen, setZoomOpen] = useState(false);
 
   // reset when another product is opened
   useEffect(() => {
@@ -34,8 +33,11 @@ export default function Product_detail() {
     );
   }
 
-  const images = product.images?.length ? product.images : [product.image];
-  const inStock = product.inStock !== false;
+const images = product.apple_views?.length
+  ? product.apple_views
+  : product.images?.length
+    ? product.images
+    : [product.image].filter(Boolean);  const inStock = product.inStock !== false;
 
   const handleAddToCart = () => {
     // connect to your cart state / context here
@@ -65,7 +67,25 @@ export default function Product_detail() {
           <section className="pd-gallery">
             <div className="pd-main-image">
               <img src={images[activeImage]} alt={product.name} />
+              <button
+                type="button"
+                className="pd-zoom"
+                onClick={() => setZoomOpen(true)}
+                aria-label="Zoom image"
+              >
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+                  stroke="currentColor" strokeWidth="2.6" strokeLinecap="round">
+                  <circle cx="10.5" cy="10.5" r="6.5" />
+                  <path d="M15.5 15.5L21 21" />
+                </svg>
+              </button>
             </div>
+
+            {zoomOpen && (
+              <div className="pd-lightbox" onClick={() => setZoomOpen(false)}>
+                <img src={images[activeImage]} alt={product.name} />
+              </div>
+            )}
 
             <div className="pd-thumbs">
               {images.map((img, index) => (
@@ -90,11 +110,12 @@ export default function Product_detail() {
               <div className="pd-rating">
                 <span
                   className="pd-stars"
-                  style={{ "--rating": product.rating }}
+                  style={{ "--rating": Math.round(product.rating * 2) / 2 }}
                   aria-hidden="true"
                 >
                   ★★★★★
                 </span>
+
                 <strong>{product.rating}</strong>
                 <span>({product.reviews} reviews)</span>
               </div>
@@ -144,7 +165,10 @@ export default function Product_detail() {
                   onClick={handleAddToCart}
                   disabled={!inStock}
                 >
-                  🛒 Add to Cart
+                  <svg className="pd-cart-icon" viewBox="0 0 24 24" width="26" height="26" fill="currentColor" aria-hidden="true">
+                    <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1 1 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" />
+                  </svg>
+                  Add to Cart
                 </button>
 
                 <button
